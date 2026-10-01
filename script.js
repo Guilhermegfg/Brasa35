@@ -425,10 +425,15 @@ function showPix() {
   document.getElementById("pixTotal").textContent = currency.format(total);
   const qr = document.getElementById("pixQrCode");
   qr.innerHTML = "";
-  if (window.QRCode) {
-    new QRCode(qr, { text: currentPixPayload, width: 220, height: 220, correctLevel: QRCode.CorrectLevel.M });
-  } else {
-    qr.innerHTML = '<p style="color:#111;text-align:center;font-size:12px">Não foi possível carregar o QR Code.<br>Use o PIX Copia e Cola abaixo.</p>';
+  try {
+    if (typeof QRCode !== "undefined") {
+      new QRCode(qr, { text: currentPixPayload, width: 220, height: 220, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
+    } else {
+      throw new Error("Biblioteca QRCode indisponível");
+    }
+  } catch (error) {
+    console.error("Erro ao gerar QR PIX:", error);
+    qr.innerHTML = '<p style="color:#111;text-align:center;font-size:12px;padding:20px">QR Code indisponível neste navegador.<br><strong>Use o botão PIX Copia e Cola.</strong></p>';
   }
 }
 
