@@ -185,7 +185,7 @@ function openOverlay() {
 }
 
 function closeOverlayIfNeeded() {
-  if (!cartDrawer.classList.contains("open") && productModal.classList.contains("hidden")) {
+  if (!cartDrawer.classList.contains("open") && productModal.classList.contains("hidden") && document.getElementById("paymentModal").classList.contains("hidden")) {
     modalBackdrop.classList.add("hidden");
     document.body.classList.remove("no-scroll");
   }
@@ -332,30 +332,107 @@ function closeCart() {
   setTimeout(closeOverlayIfNeeded, 260);
 }
 
-function checkoutWhatsapp() {
+const PIX_KEY = "70569857180";
+let currentPixPayload = "";
+
+function cartTotalValue() {
+  return state.cart.reduce((sum, item) => sum + cartItemUnitPrice(item) * item.qty, 0);
+}
+
+function crc16(payload) {
+  let crc = 0xFFFF;
+  for (let i = 0; i < payload.length; i++) {
+    crc ^= payload.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++) crc = (crc & 0x8000) ? ((crc << 1) ^ 0x1021) & 0xFFFF : (crc << 1) & 0xFFFF;
+  }
+  return crc.toString(16).toUpperCase().padStart(4, "0");
+}
+
+function emv(id, value) {
+  return id + String(value.length).padStart(2, "0") + value;
+}
+
+function buildPixPayload(amount) {
+  const merchantAccount = emv("00", "BR.GOV.BCB.PIX") + emv("01", PIX_KEY);
+  const txid = "BRASA35";
+  let payload = emv("00", "01") +
+    emv("26", merchantAccount) +
+    emv("52", "0000") +
+    emv("53", "986") +
+    emv("54", amount.toFixed(2)) +
+    emv("58", "BR") +
+    emv("59", "BRASA 35") +
+    emv("60", "GOIANIA") +
+    emv("62", emv("05", txid)) +
+    "6304";
+  return payload + crc16(payload);
+}
+
+function whatsappOrder(payment) {
+  const total = cartTotalValue();
+  const lines = [
+    "Olá! Quero fazer um pedido na BRASA 35 🔥",
+    "",
+    ...state.cart.map(item => {
+      const itemTotal = cartItemUnitPrice(item) * item.qty;
+      const extras = item.extras.length ? `\n   Adicionais: ${item.extras.map(e => e.name).join(", ")}` : "";
+      return `• ${item.qty}x ${item.name} — ${currency.format(itemTotal)}${extras}`;
+    }),
+    "",
+    `*Total: ${currency.format(total)}*`,
+    `*Pagamento: ${payment === "pix" ? "PIX — cliente informou que realizou o pagamento (conferir recebimento)" : "Na retirada"}*`,
+    orderNote.value.trim() ? `Observações: ${orderNote.value.trim()}` : "",
+    "",
+    payment === "pix" ? "Envio o pedido após realizar o PIX. Favor conferir o recebimento e confirmar." : "Pode confirmar disponibilidade e prazo para retirada, por favor?"
+  ];
+  window.open(`https://wa.me/5562998230185?text=${encodeURIComponent(lines.filter(Boolean).join("\n"))}`, "_blank");
+}
+
+function openPayment() {
   if (!state.cart.length) {
     alert("Adicione pelo menos um item ao pedido.");
     return;
   }
+  closeCart();
+  setTimeout(() => {
+    document.getElementById("paymentOptions").classList.remove("hidden");
+    document.getElementById("pixStep").classList.add("hidden");
+    document.getElementById("paymentConfirmed").checked = false;
+    document.getElementById("paidWhatsappBtn").disabled = true;
+    document.getElementById("paymentModal").classList.remove("hidden");
+    openOverlay();
+  }, 280);
+}
 
-  const total = state.cart.reduce((sum, item) => sum + cartItemUnitPrice(item) * item.qty, 0);
-  const lines = [
-    "Olá! Quero fazer um pedido na BRASA 35 🔥",
-    "",
-    ...state.cart.flatMap(item => {
-      const itemTotal = cartItemUnitPrice(item) * item.qty;
-      const extras = item.extras.length ? `\n   Adicionais: ${item.extras.map(e => e.name).join(", ")}` : "";
-      return [`• ${item.qty}x ${item.name} — ${currency.format(itemTotal)}${extras}`];
-    }),
-    "",
-    `*Total: ${currency.format(total)}*`,
-    orderNote.value.trim() ? `\nObservações: ${orderNote.value.trim()}` : "",
-    "",
-    "Pode confirmar disponibilidade e prazo, por favor?"
-  ];
+function closePayment() {
+  document.getElementById("paymentModal").classList.add("hidden");
+  closeOverlayIfNeeded();
+}
 
-  const message = encodeURIComponent(lines.filter(Boolean).join("\n"));
-  window.open(`https://wa.me/5562998230185?text=${message}`, "_blank");
+function showPix() {
+  const total = cartTotalValue();
+  currentPixPayload = buildPixPayload(total);
+  document.getElementById("paymentOptions").classList.add("hidden");
+  document.getElementById("pixStep").classList.remove("hidden");
+  document.getElementById("pixTotal").textContent = currency.format(total);
+  const qr = document.getElementById("pixQrCode");
+  qr.innerHTML = "";
+  if (window.QRCode) new QRCode(qr, { text: currentPixPayload, width: 220, height: 220, correctLevel: QRCode.CorrectLevel.M });
+}
+
+async function copyText(value, button) {
+  try {
+    await navigator.clipboard.writeText(value);
+    const old = button.textContent;
+    button.textContent = "Copiado ✓";
+    setTimeout(() => button.textContent = old, 1800);
+  } catch {
+    prompt("Copie o código:", value);
+  }
+}
+
+function checkoutWhatsapp() {
+  openPayment();
 }
 
 searchInput.addEventListener("input", e => {
@@ -367,9 +444,23 @@ document.getElementById("cartTrigger").addEventListener("click", openCart);
 document.getElementById("closeCart").addEventListener("click", closeCart);
 document.getElementById("closeModal").addEventListener("click", closeProduct);
 document.getElementById("checkoutBtn").addEventListener("click", checkoutWhatsapp);
+document.getElementById("closePayment").addEventListener("click", closePayment);
+document.querySelector('[data-payment="pickup"]').addEventListener("click", () => whatsappOrder("pickup"));
+document.querySelector('[data-payment="pix"]').addEventListener("click", showPix);
+document.getElementById("backPayment").addEventListener("click", () => {
+  document.getElementById("pixStep").classList.add("hidden");
+  document.getElementById("paymentOptions").classList.remove("hidden");
+});
+document.getElementById("copyPixKey").addEventListener("click", e => copyText("705.698.571-80", e.currentTarget));
+document.getElementById("copyPixPayload").addEventListener("click", e => copyText(currentPixPayload, e.currentTarget));
+document.getElementById("paymentConfirmed").addEventListener("change", e => {
+  document.getElementById("paidWhatsappBtn").disabled = !e.target.checked;
+});
+document.getElementById("paidWhatsappBtn").addEventListener("click", () => whatsappOrder("pix"));
 modalBackdrop.addEventListener("click", () => {
   closeProduct();
   closeCart();
+  closePayment();
 });
 
 document.getElementById("qtyMinus").addEventListener("click", () => {
