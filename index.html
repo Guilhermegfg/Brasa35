@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BRASA 35 | Hamburgueria Artesanal em Goiânia</title>
+  <meta name="description" content="Cardápio digital da BRASA 35, hamburgueria artesanal no Setor Aeroporto, Goiânia. Monte seu pedido e envie direto pelo WhatsApp." />
+  <meta name="theme-color" content="#111111" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="BRASA 35">
+      <span class="brand-fire">BRASA</span><span class="brand-number">35</span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Navegação principal">
+      <a href="#cardapio">Cardápio</a>
+      <a href="#sobre">Nossa brasa</a>
+      <a href="#contato">Contato</a>
+    </nav>
+
+    <button class="cart-trigger" id="cartTrigger" aria-label="Abrir carrinho">
+      <span>Pedido</span>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-copy">
+        <div class="eyebrow">Setor Aeroporto • Goiânia</div>
+        <h1>Fogo alto.<br><span>Sabor sem freio.</span></h1>
+        <p>Smash burgers feitos na chapa, ingredientes marcantes e aquele ponto de brasa que transforma uma fome comum em ritual.</p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#cardapio">Ver cardápio</a>
+          <a class="btn btn-ghost" href="https://wa.me/5562998230185" target="_blank" rel="noopener">Pedir no WhatsApp</a>
+        </div>
+
+        <div class="hero-stats">
+          <div><strong>4,9</strong><span>avaliação fictícia</span></div>
+          <div><strong>25–40 min</strong><span>tempo médio</span></div>
+          <div><strong>100%</strong><span>carne na chapa</span></div>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-label="Hambúrguer artesanal BRASA 35">
+        <div class="hero-photo"></div>
+        <div class="hero-badge">
+          <small>mais pedido</small>
+          <strong>Brasa Bacon</strong>
+          <span>R$ 34,90</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="service-strip" aria-label="Diferenciais">
+      <span>🔥 Chapa no ponto</span>
+      <span>🥩 Blend artesanal</span>
+      <span>🛵 Delivery</span>
+      <span>📲 Pedido pelo WhatsApp</span>
+    </section>
+
+    <section class="menu-section" id="cardapio">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Escolha sem pressa. A fome pode.</span>
+          <h2>Cardápio</h2>
+        </div>
+        <div class="search-wrap">
+          <input type="search" id="searchInput" placeholder="Buscar no cardápio..." aria-label="Buscar no cardápio">
+        </div>
+      </div>
+
+      <div class="category-nav" id="categoryNav"></div>
+      <div class="menu-grid" id="menuGrid"></div>
+    </section>
+
+    <section class="story-section" id="sobre">
+      <div class="story-media"></div>
+      <div class="story-copy">
+        <span class="eyebrow">Nossa brasa</span>
+        <h2>Não é só burger.<br>É o momento antes da primeira mordida.</h2>
+        <p>A BRASA 35 nasceu como uma hamburgueria fictícia de demonstração, pensada para mostrar como um cardápio digital pode vender mais sem parecer um catálogo genérico.</p>
+        <p>Visual forte, leitura rápida, produtos bem apresentados e um fluxo de pedido direto para o WhatsApp.</p>
+        <a class="text-link" href="#cardapio">Escolher meu burger →</a>
+      </div>
+    </section>
+
+    <section class="location-section" id="contato">
+      <div class="location-copy">
+        <span class="eyebrow">Onde encontrar</span>
+        <h2>Setor Aeroporto,<br>Goiânia — GO</h2>
+        <p>Atendimento fictício para demonstração do projeto. Consulte rota pelo mapa e finalize pedidos diretamente no WhatsApp.</p>
+
+        <div class="contact-list">
+          <a href="https://wa.me/5562998230185" target="_blank" rel="noopener">WhatsApp • (62) 9 9823-0185</a>
+          <a href="https://www.instagram.com/gfgtech14/" target="_blank" rel="noopener">Instagram • @gfgtech14</a>
+        </div>
+
+        <a class="btn btn-primary" href="https://www.google.com/maps/search/?api=1&query=Setor+Aeroporto,+Goi%C3%A2nia,+GO" target="_blank" rel="noopener">Abrir no Maps</a>
+      </div>
+
+      <div class="map-wrap">
+        <iframe
+          title="Mapa do Setor Aeroporto, Goiânia"
+          src="https://www.google.com/maps?q=Setor%20Aeroporto%2C%20Goi%C3%A2nia%2C%20GO&z=15&output=embed"
+          width="100%"
+          height="100%"
+          style="border:0"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="brand footer-brand"><span class="brand-fire">BRASA</span><span class="brand-number">35</span></div>
+    <p>Hamburgueria artesanal fictícia • Setor Aeroporto, Goiânia — GO</p>
+    <p class="footer-credit">Projeto demonstrativo desenvolvido pela GFGTech.</p>
+  </footer>
+
+  <div class="modal-backdrop hidden" id="modalBackdrop"></div>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div>
+        <span class="eyebrow">Seu pedido</span>
+        <h3>Carrinho</h3>
+      </div>
+      <button class="icon-btn" id="closeCart" aria-label="Fechar carrinho">×</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+      <label class="note-label" for="orderNote">Observações</label>
+      <textarea id="orderNote" placeholder="Ex.: sem cebola, ponto da carne..."></textarea>
+      <div class="total-row"><span>Total</span><strong id="cartTotal">R$ 0,00</strong></div>
+      <button class="btn btn-primary btn-full" id="checkoutBtn">Finalizar no WhatsApp</button>
+    </div>
+  </aside>
+
+  <div class="product-modal hidden" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="icon-btn modal-close" id="closeModal" aria-label="Fechar">×</button>
+    <div class="modal-image" id="modalImage"></div>
+    <div class="modal-content">
+      <span class="eyebrow" id="modalCategory"></span>
+      <h3 id="modalTitle"></h3>
+      <p id="modalDescription"></p>
+
+      <div class="extras-wrap" id="extrasWrap">
+        <h4>Adicionais</h4>
+        <div id="extrasList"></div>
+      </div>
+
+      <div class="modal-bottom">
+        <div class="qty-control">
+          <button id="qtyMinus" aria-label="Diminuir quantidade">−</button>
+          <span id="qtyValue">1</span>
+          <button id="qtyPlus" aria-label="Aumentar quantidade">+</button>
+        </div>
+        <button class="btn btn-primary" id="addToCartBtn">Adicionar • <span id="modalPrice"></span></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
