@@ -144,7 +144,7 @@
       <label class="note-label" for="orderNote">Observações</label>
       <textarea id="orderNote" placeholder="Ex.: sem cebola, ponto da carne..."></textarea>
       <div class="total-row"><span>Total</span><strong id="cartTotal">R$ 0,00</strong></div>
-      <button class="btn btn-primary btn-full" id="checkoutBtn">Finalizar no WhatsApp</button>
+      <button class="btn btn-primary btn-full" id="checkoutBtn">Continuar para pagamento</button>
     </div>
   </aside>
 
@@ -172,6 +172,51 @@
     </div>
   </div>
 
+  <div class="payment-modal hidden" id="paymentModal" role="dialog" aria-modal="true" aria-labelledby="paymentTitle">
+    <button class="icon-btn payment-close" id="closePayment" aria-label="Fechar">×</button>
+    <div class="payment-content">
+      <span class="eyebrow">Finalizar pedido</span>
+      <h3 id="paymentTitle">Como deseja pagar?</h3>
+      <p class="payment-subtitle">Escolha uma opção para concluir seu pedido.</p>
+
+      <div class="payment-options" id="paymentOptions">
+        <button class="payment-option" data-payment="pickup">
+          <span class="payment-icon">🏪</span>
+          <span><strong>Pagar na retirada</strong><small>Faça o pedido agora e pague ao retirar.</small></span>
+        </button>
+        <button class="payment-option" data-payment="pix">
+          <span class="payment-icon">◆</span>
+          <span><strong>Pagar agora com PIX</strong><small>QR Code com o valor exato do pedido.</small></span>
+        </button>
+      </div>
+
+      <div class="pix-step hidden" id="pixStep">
+        <button class="back-payment" id="backPayment">← Alterar forma de pagamento</button>
+        <div class="pix-head">
+          <span class="pix-badge">PIX</span>
+          <h4>Escaneie para pagar</h4>
+          <p>Valor do pedido: <strong id="pixTotal"></strong></p>
+        </div>
+        <div class="qr-shell"><div id="pixQrCode"></div></div>
+        <div class="pix-key-box">
+          <small>Chave PIX • CPF</small>
+          <div><code>705.698.571-80</code><button id="copyPixKey">Copiar chave</button></div>
+        </div>
+        <div class="pix-copy-box">
+          <small>PIX Copia e Cola</small>
+          <button id="copyPixPayload">Copiar código PIX</button>
+        </div>
+        <label class="payment-confirm">
+          <input type="checkbox" id="paymentConfirmed">
+          <span>Confirmo que já realizei o pagamento deste pedido.</span>
+        </label>
+        <p class="payment-warning">O pagamento informado pelo cliente será conferido antes da confirmação do pedido.</p>
+        <button class="btn btn-primary btn-full" id="paidWhatsappBtn" disabled>Já paguei • Enviar pedido</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07KX7rQYQ3zfbzGyh82A5uTTn4QkWmkS1dS3BfB7QK1FfU67hmVEIRmF0e3T1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="script.js"></script>
 </body>
 </html>
