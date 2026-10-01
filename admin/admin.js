@@ -1,3 +1,23 @@
+const ADMIN_PASSWORD="gfg140300";
+const ADMIN_SESSION_KEY="brasa35_admin_auth";
+function unlockAdmin(){
+  document.body.classList.remove("locked");
+  document.getElementById("loginGate")?.classList.add("unlocked");
+}
+if(sessionStorage.getItem(ADMIN_SESSION_KEY)==="1") unlockAdmin();
+document.getElementById("loginForm")?.addEventListener("submit",e=>{
+  e.preventDefault();
+  const input=document.getElementById("adminPassword");
+  if(input.value===ADMIN_PASSWORD){
+    sessionStorage.setItem(ADMIN_SESSION_KEY,"1");
+    document.getElementById("loginError").textContent="";
+    unlockAdmin();
+  }else{
+    document.getElementById("loginError").textContent="Senha incorreta.";
+    input.value="";
+    input.focus();
+  }
+});
 const DEFAULT_PRODUCTS=[
 {id:1,name:"Brasa Clássico",category:"Hambúrgueres",price:28.9,tag:"clássico",description:"Pão brioche, smash 160g, cheddar, cebola roxa, picles e molho da casa.",image:"https://images.unsplash.com/photo-1590742309630-e9f9b66da3f7?auto=format&fit=crop&w=1000&q=82",extras:true,available:true},
 {id:2,name:"Brasa Bacon",category:"Hambúrgueres",price:34.9,tag:"mais pedido",description:"Smash 160g, cheddar duplo, bacon crocante, cebola caramelizada e barbecue.",image:"https://i.pinimg.com/originals/20/fe/f4/20fef425655c6fe95592a0e011d799b7.jpg",extras:true,available:true},
