@@ -114,7 +114,8 @@ const state = {
   search: "",
   cart: [],
   modalItem: null,
-  modalQty: 1
+  modalQty: 1,
+  orderId: null
 };
 
 const menuGrid = document.getElementById("menuGrid");
@@ -352,9 +353,14 @@ function emv(id, value) {
   return id + String(value.length).padStart(2, "0") + value;
 }
 
-function buildPixPayload(amount) {
+function generateOrderId() {
+  const time = Date.now().toString(36).toUpperCase().slice(-5);
+  const random = Math.random().toString(36).toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 3).padEnd(3, "0");
+  return `B35${time}${random}`.slice(0, 25);
+}
+
+function buildPixPayload(amount, txid) {
   const merchantAccount = emv("00", "BR.GOV.BCB.PIX") + emv("01", PIX_KEY);
-  const txid = "BRASA35";
   let payload = emv("00", "01") +
     emv("26", merchantAccount) +
     emv("52", "0000") +
@@ -372,6 +378,7 @@ function whatsappOrder(payment) {
   const total = cartTotalValue();
   const lines = [
     "Olá! Quero fazer um pedido na BRASA 35 🔥",
+    `*Pedido: #${state.orderId || "B35"}*`,
     "",
     ...state.cart.map(item => {
       const itemTotal = cartItemUnitPrice(item) * item.qty;
@@ -393,6 +400,7 @@ function openPayment() {
     alert("Adicione pelo menos um item ao pedido.");
     return;
   }
+  state.orderId = generateOrderId();
   closeCart();
   setTimeout(() => {
     document.getElementById("paymentOptions").classList.remove("hidden");
@@ -411,13 +419,17 @@ function closePayment() {
 
 function showPix() {
   const total = cartTotalValue();
-  currentPixPayload = buildPixPayload(total);
+  currentPixPayload = buildPixPayload(total, state.orderId || generateOrderId());
   document.getElementById("paymentOptions").classList.add("hidden");
   document.getElementById("pixStep").classList.remove("hidden");
   document.getElementById("pixTotal").textContent = currency.format(total);
   const qr = document.getElementById("pixQrCode");
   qr.innerHTML = "";
-  if (window.QRCode) new QRCode(qr, { text: currentPixPayload, width: 220, height: 220, correctLevel: QRCode.CorrectLevel.M });
+  if (window.QRCode) {
+    new QRCode(qr, { text: currentPixPayload, width: 220, height: 220, correctLevel: QRCode.CorrectLevel.M });
+  } else {
+    qr.innerHTML = '<p style="color:#111;text-align:center;font-size:12px">Não foi possível carregar o QR Code.<br>Use o PIX Copia e Cola abaixo.</p>';
+  }
 }
 
 async function copyText(value, button) {
