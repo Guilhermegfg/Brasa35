@@ -1,4 +1,4 @@
-const ADMIN_PASSWORD="gfg140300";
+const ADMIN_PASSWORD="1234";
 const ADMIN_SESSION_KEY="brasa35_admin_auth";
 function unlockAdmin(){
   document.body.classList.remove("locked");
