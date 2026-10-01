@@ -552,3 +552,46 @@ footer p { margin: 6px 0; }
   .modal-bottom { position:sticky; bottom:0; background:#151516; padding-bottom:4px; }
   .modal-bottom .btn { flex:1; padding-inline:12px; }
 }
+
+
+/* Checkout / pagamento */
+.payment-modal {
+  position: fixed; z-index: 75; inset: 50% auto auto 50%; transform: translate(-50%,-50%);
+  width: min(560px, calc(100% - 24px)); max-height: 92dvh; overflow:auto;
+  border-radius: 26px; background:#151516; border:1px solid var(--line); box-shadow:var(--shadow);
+}
+.payment-close { position:absolute; top:14px; right:14px; z-index:2; }
+.payment-content { padding:36px; }
+.payment-content h3 { margin:8px 50px 5px 0; font-size:32px; }
+.payment-subtitle { color:var(--muted); margin:0 0 24px; }
+.payment-options { display:grid; gap:12px; }
+.payment-option {
+  width:100%; display:flex; align-items:center; gap:15px; text-align:left; padding:18px;
+  border:1px solid var(--line); border-radius:16px; background:#1b1b1c; color:#fff;
+  transition:.2s ease;
+}
+.payment-option:hover { border-color:rgba(255,90,31,.55); transform:translateY(-1px); }
+.payment-option span:last-child { display:flex; flex-direction:column; gap:4px; }
+.payment-option small { color:var(--muted); line-height:1.4; }
+.payment-icon { width:44px; height:44px; display:grid; place-items:center; flex:0 0 auto; border-radius:12px; background:rgba(255,90,31,.12); color:#ff8d63; font-size:20px; }
+.back-payment { border:0; background:transparent; color:#ff8d63; padding:0; font-weight:700; }
+.pix-head { text-align:center; margin:22px 0 14px; }
+.pix-head h4 { font-size:24px; margin:8px 0 4px; }
+.pix-head p { color:var(--muted); margin:0; }
+.pix-badge { display:inline-block; padding:5px 9px; border-radius:999px; background:#183b31; color:#63dfb8; font-size:11px; font-weight:800; }
+.qr-shell { width:252px; height:252px; margin:18px auto; padding:16px; background:#fff; border-radius:18px; display:grid; place-items:center; }
+#pixQrCode img, #pixQrCode canvas { display:block; max-width:100%; height:auto; }
+.pix-key-box, .pix-copy-box { border:1px solid var(--line); background:#1b1b1c; border-radius:14px; padding:13px; margin-top:10px; }
+.pix-key-box small, .pix-copy-box small { display:block; color:var(--muted); margin-bottom:8px; }
+.pix-key-box div { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.pix-key-box code { color:#fff; font-size:14px; }
+.pix-key-box button, .pix-copy-box button { border:0; background:transparent; color:#ff8d63; font-weight:800; padding:3px; }
+.payment-confirm { display:flex; gap:10px; align-items:flex-start; margin:18px 0 8px; line-height:1.45; font-size:14px; }
+.payment-confirm input { margin-top:3px; accent-color:var(--accent); }
+.payment-warning { color:#9e978f; font-size:11px; line-height:1.5; margin:0 0 14px; }
+#paidWhatsappBtn:disabled { opacity:.4; cursor:not-allowed; transform:none; }
+@media (max-width:680px) {
+  .payment-content { padding:28px 18px 20px; }
+  .payment-content h3 { font-size:27px; }
+  .qr-shell { width:232px; height:232px; }
+}
